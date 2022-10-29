@@ -1,7 +1,7 @@
 import { workspace, Disposable, ExtensionContext } from "vscode";
 import { extensionConfig } from "./providers/config";
 import { NginxCompletionItemsProvider } from "./providers/completion";
-import { NginxDocumentLinkProvider } from "./providers/link";
+import { NginxDocumentLinkProvider, OpenRestyLuaFileLink } from "./providers/link";
 import { NginxDefinitionProvider } from "./providers/definition";
 import { NginxDocumentFormatProvider } from "./providers/formatter";
 import { NginxHoverProvider } from "./providers/hover";
@@ -24,6 +24,7 @@ export function activate(context: ExtensionContext) {
 	const disposable: Disposable[] = [];
 
 	extensionConfig.reload();
+	new OpenRestyLuaFileLink(disposable);
 	new NginxDocumentLinkProvider(disposable);
 	new NginxDefinitionProvider(disposable);
 	new NginxCompletionItemsProvider(disposable);
