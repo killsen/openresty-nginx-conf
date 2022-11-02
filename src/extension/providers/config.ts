@@ -6,7 +6,7 @@ export class ExtensionConfiguration {
 	//#region vscode configurations
 	enableStrictCompletion = true;
 	enableFormatAlign = false;
-	externalModules: ExternalModuleName[] = [];
+	externalModules: ExternalModuleName[] = ["lua"];
 	tabSize = 4;
 	//#endregion vscode configurations
 
@@ -18,7 +18,7 @@ export class ExtensionConfiguration {
 
 		this.enableStrictCompletion = config.get('enableStrictCompletion', true);
 		this.enableFormatAlign = !!config.get('format', { align: false }).align;
-		this.externalModules = config.get('externalModules', []);
+		this.externalModules = config.get('externalModules', ["lua"]);
 		this.tabSize = workspace.getConfiguration("editor").get("tabSize", 4);
 
 		this.hasJsModule = this.externalModules.indexOf('js') >= 0;

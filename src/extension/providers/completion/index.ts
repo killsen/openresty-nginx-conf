@@ -27,13 +27,18 @@ import { _completeNameLocation, _doesDirectiveCanUseNamedLocation } from "./name
 import { _completeHttpHeader, _doesDirectiveNeedHttpHeader } from "./http-header";
 import { _completeDirectives } from "./directives";
 
+import { basename } from 'path'
+
 const zeroPos = new Position(0, 0);
 
 export class NginxCompletionItemsProvider implements CompletionItemProvider {
 	mediaTypePrefixItems: CompletionItem[] = [];
 
 	constructor(disposables: Disposable[]) {
-		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " ", "@", "-"));
+		// 去除按空格触发代码补全
+		disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", "@", "-"));
+		// disposables.push(languages.registerCompletionItemProvider(DOCUMENT_SELECTOR, this, "$", "/", " ", "@", "-"));
+
 		this.mediaTypePrefixItems = mediaTypePrefixes.map((it) => {
 			const item = new CompletionItem(`${it}/`, CompletionItemKind.Value);
 			item.detail = "Media Type";
@@ -69,6 +74,39 @@ export class NginxCompletionItemsProvider implements CompletionItemProvider {
 	) {
 		const beforeText = document.getText(new Range(zeroPos, position));
 		const cursorContext = getNginxConfCursorContext(beforeText);
+
+		// 默认 context 为 main
+		// cursorContext.context = cursorContext.context || "main";
+
+		if (!cursorContext.context) {
+			const name = basename(document.fileName).toLowerCase();
+
+			if (name === "nginx.conf") {
+				cursorContext.context = "main";
+
+			} else if (beforeText.startsWith("# main")) {
+				cursorContext.context = "main";
+			} else if (beforeText.startsWith("# http")) {
+				cursorContext.context = "http";
+			} else if (beforeText.startsWith("# server")) {
+				cursorContext.context = "server";
+			} else if (beforeText.startsWith("# location")) {
+				cursorContext.context = "location";
+
+			} else if (name === "lua.conf") {
+				cursorContext.context = "http";
+
+			} else if (name.includes("http")) {
+				cursorContext.context = "http";
+			} else if (name.includes("server")) {
+				cursorContext.context = "server";
+			} else if (name.includes("location")) {
+				cursorContext.context = "location";
+			}
+		}
+
+		// lua 代码不触发代码补全
+		if (cursorContext.lua) return null;
 
 		// in comment
 		if (cursorContext.c) return null;

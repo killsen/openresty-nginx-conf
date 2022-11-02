@@ -2,7 +2,7 @@
 	"name": "openresty-nginx-conf",
 	"displayName": "OpenResty nginx.conf hint",
 	"description": "OpenResty Nginx configuration helper for Visual Studio Code forked from hangxingliu/vscode-nginx-conf-hint",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"license": "GPL-3.0",
 	"icon": "images/icon.png",
 	"galleryBanner": {
@@ -64,7 +64,7 @@
 		"eslint": "^8.2.0"
 	},
 	"engines": {
-		"vscode": "^1.72.0"
+        "vscode": "^1.67.0"
 	},
 	"activationEvents": [
 		"onLanguage:NGINX"
@@ -135,7 +135,7 @@
 								"js"
 							]
 						},
-						"default": [],
+						"default": ["lua"],
 						"description": "%ext.config.extenal-modules.description%"
 					}
 				}

@@ -1,9 +1,9 @@
 {
-	"nginx-conf-hint.enableStrictCompletion": false,
+	"nginx-conf-hint.enableStrictCompletion": true,
 	"files.associations": {
 		"*.conf.disabled": "NGINX"
 	},
-	"nginx-conf-hint.externalModules": ["lua","js"],
+	"nginx-conf-hint.externalModules": ["lua"],
 	// "workbench.colorTheme": "Visual Studio Light",
 	"editor.tokenColorCustomizations": {
 		"[Solarized Light]": {
